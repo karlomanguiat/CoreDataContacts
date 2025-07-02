@@ -9,7 +9,13 @@ import SwiftUI
 
 struct ContactEmptyView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(spacing: 8) {
+            Text("No contacts found!")
+                .font(.headline)
+            Text("Tap the plus (+) button to add a new contact.")
+                .font(.caption)
+        }
+
     }
 }
 

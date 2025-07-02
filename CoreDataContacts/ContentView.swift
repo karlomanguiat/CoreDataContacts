@@ -16,19 +16,27 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(contacts) { contact in
-                    ZStack(alignment: .leading) {
-                        NavigationLink(destination: ContactDetailView(contact: contact)) {
-                            EmptyView()
+            ZStack {
+                
+                if contacts.isEmpty {
+                    ContactEmptyView()
+                } else {
+                    List {
+                        ForEach(contacts) { contact in
+                            ZStack(alignment: .leading) {
+                                NavigationLink(destination: ContactDetailView(contact: contact)) {
+                                    EmptyView()
+                                }
+                                .opacity(0)
+                                
+                                ContactRowView(contact: contact)
+                            }
+                            
                         }
-                        .opacity(0)
-                        
-                        ContactRowView(contact: contact)
                     }
-                   
                 }
             }
+            
             .navigationTitle("Contacts")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
