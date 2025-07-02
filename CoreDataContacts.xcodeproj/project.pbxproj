@@ -46,6 +46,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BC2F64C82E152B9D00AEAB9D /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				BC8EB4202E13BD1400ECEBBD /* ContactRowView .swift */,
+				BC8EB4242E13BE8800ECEBBD /* ContactDetailView.swift */,
+				BC8EB42B2E13E8FF00ECEBBD /* ContactEmptyView.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		BC8EB3F62E13B51500ECEBBD = {
 			isa = PBXGroup;
 			children = (
@@ -65,15 +75,13 @@
 		BC8EB4102E13B69100ECEBBD /* CoreDataContacts */ = {
 			isa = PBXGroup;
 			children = (
-				BC8EB4282E13C6B000ECEBBD /* Edit Contact */,
+				BC8EB4282E13C6B000ECEBBD /* Update Edit Contact */,
 				BC8EB41F2E13B90A00ECEBBD /* Model */,
 				BC8EB41D2E13B90700ECEBBD /* Provider */,
 				BC8EB40D2E13B69100ECEBBD /* Assets.xcassets */,
 				BC8EB40F2E13B69100ECEBBD /* CoreDataContactsApp.swift */,
 				BC8EB40E2E13B69100ECEBBD /* ContentView.swift */,
-				BC8EB4202E13BD1400ECEBBD /* ContactRowView .swift */,
-				BC8EB4242E13BE8800ECEBBD /* ContactDetailView.swift */,
-				BC8EB42B2E13E8FF00ECEBBD /* ContactEmptyView.swift */,
+				BC2F64C82E152B9D00AEAB9D /* UI */,
 			);
 			path = CoreDataContacts;
 			sourceTree = "<group>";
@@ -95,13 +103,13 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		BC8EB4282E13C6B000ECEBBD /* Edit Contact */ = {
+		BC8EB4282E13C6B000ECEBBD /* Update Edit Contact */ = {
 			isa = PBXGroup;
 			children = (
 				BC8EB4262E13C07600ECEBBD /* AddNewContactView.swift */,
 				BC8EB4292E13C74200ECEBBD /* EditContactViewModel.swift */,
 			);
-			path = "Edit Contact";
+			path = "Update Edit Contact";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -38,7 +38,7 @@ struct AddNewContactView: View {
                           axis: .vertical )
             }
         }
-        .navigationTitle(Text("Add New Contact"))
+        .navigationTitle(viewModel.isNew ? "Add New Contact" : "Update Contact")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
