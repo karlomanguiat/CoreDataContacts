@@ -65,6 +65,11 @@ extension Contact {
             
         }
     }
+    
+    //Sorting
+    static func sort(order: Sort) -> [NSSortDescriptor] {
+        [NSSortDescriptor(keyPath: \Contact.name, ascending: order == .ascending)]
+    }
         
 }
 

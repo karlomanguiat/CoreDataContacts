@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var contactToEdit: Contact?
     @State private var searchText: SearchConfiguration = .init()
-    
+    @State private var sort: Sort = .ascending
     @FetchRequest(fetchRequest: Contact.all()) private var contacts
     
     var provider = ContactsProvider.shared
@@ -79,6 +79,17 @@ struct ContentView: View {
                                 Text("Filter Favorites")
                             }
                         }
+                        
+                        Section {
+                            Text("Sort by")
+                            Picker(selection: $sort) {
+                                Label("Ascending", systemImage: "arrow.up").tag(Sort.ascending)
+                                Label("Descending", systemImage: "arrow.down").tag(Sort.descending)
+                            } label: {
+                                Text("Filter Favorites")
+                            }
+                        }
+                       
                     } label: {
                         Image(systemName: "ellipsis")
                             .symbolVariant(.fill)
@@ -99,7 +110,9 @@ struct ContentView: View {
             .onChange(of: searchText) { oldValue, newValue in
                 contacts.nsPredicate = Contact.filter(with: newValue)
             }
-            
+            .onChange(of: sort) { oldSort, newSort in
+                contacts.nsSortDescriptors = Contact.sort(order: newSort)
+            }
         }
     }
 }
@@ -112,6 +125,10 @@ struct SearchConfiguration: Equatable {
     }
     
     var filter: Filter = .all
+}
+
+enum Sort {
+    case ascending, descending
 }
 
 #Preview {
