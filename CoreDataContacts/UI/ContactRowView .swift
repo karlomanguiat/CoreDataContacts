@@ -43,6 +43,7 @@ private extension ContactRowView {
     func toggleFavorite() {
         contact.isFavorite.toggle()
         do {
+            //Save changes
             try provider.persist(in: managedObjContext)
         } catch {
             print(error)

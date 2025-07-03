@@ -32,16 +32,19 @@ final class Contact: NSManagedObject, Identifiable {
     override func awakeFromInsert() {
         super.awakeFromInsert()
         
+        //Set initial values
         setPrimitiveValue(Date.now, forKey: "birthDate")
         setPrimitiveValue(false, forKey: "isFavorite")
     }
 }
 
 extension Contact {
+    //Fetch entity
     private static var fetchRequest: NSFetchRequest<Contact> {
         NSFetchRequest(entityName: "Contact")
     }
     
+    //Get all contacts
     static func all() -> NSFetchRequest<Contact> {
         let request: NSFetchRequest<Contact> = fetchRequest
         request.sortDescriptors = [
@@ -50,15 +53,26 @@ extension Contact {
         return request
     }
     
-    static func filter(_ query: String) -> NSPredicate {
-        query.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "name CONTAINS[cd] %@", query)
+    //Search filter
+    static func filter(with config: SearchConfiguration) -> NSPredicate {
+        switch config.filter {
+            
+        case .all:
+            return config.query.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "name CONTAINS[cd] %@", config.query)
+            
+        case .fave:
+            return config.query.isEmpty ? NSPredicate(format: "isFavorite == %@", NSNumber(value: true)) : NSPredicate(format: "name CONTAINS[cd] %@ AND isFavorite == %@", config.query, NSNumber(value: true))
+            
+        }
     }
+        
 }
 
 extension Contact {
     
     @discardableResult
     
+    //Make a sample preview data
     static func makePreview(count: Int, context: NSManagedObjectContext) -> [Contact] {
         var contacts: [Contact] = []
         
@@ -76,10 +90,12 @@ extension Contact {
         return contacts
     }
     
+    //Preview Data with count
     static func preview(context: NSManagedObjectContext = ContactsProvider.shared.viewContext) -> Contact {
         return makePreview(count: 1, context: context)[0]
     }
     
+    //Empty Preview
     static func empty(context: NSManagedObjectContext = ContactsProvider.shared.viewContext) -> Contact {
         return Contact(context: context)
     }

@@ -68,6 +68,23 @@ struct ContentView: View {
                         Image(systemName: "plus")
                     }
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Menu {
+                        Section {
+                            Text("Filter")
+                            Picker(selection: $searchText.filter) {
+                                Text("All").tag(SearchConfiguration.Filter.all)
+                                Text("Favorites").tag(SearchConfiguration.Filter.fave)
+                            } label: {
+                                Text("Filter Favorites")
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis")
+                            .symbolVariant(.fill)
+                            .font(.title2)
+                    }
+                }
             }
             .sheet(item: $contactToEdit, onDismiss: {
                 contactToEdit = nil
@@ -80,9 +97,8 @@ struct ContentView: View {
                 
             })
             .onChange(of: searchText) { oldValue, newValue in
-                contacts.nsPredicate = NSPredicate(format: "name CONTAINS[cd] %@", newValue.query)
+                contacts.nsPredicate = Contact.filter(with: newValue)
             }
-            
             
         }
     }
@@ -90,6 +106,12 @@ struct ContentView: View {
 
 struct SearchConfiguration: Equatable {
     var query: String = ""
+    
+    enum Filter {
+        case all, fave
+    }
+    
+    var filter: Filter = .all
 }
 
 #Preview {
@@ -97,7 +119,7 @@ struct SearchConfiguration: Equatable {
     ContentView(provider: preview)
         .environment(\.managedObjectContext, preview.viewContext)
         .onAppear {
-            Contact.makePreview(count: 4, context: preview.viewContext)
+            Contact.makePreview(count: 10, context: preview.viewContext)
         }
 }
 

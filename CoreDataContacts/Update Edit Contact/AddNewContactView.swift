@@ -63,6 +63,7 @@ struct AddNewContactView: View {
 }
 
 private extension AddNewContactView {
+    //Check if entered values are valid and non-empty
     func validateContact() {
         if viewModel.contact.isValid {
             do {

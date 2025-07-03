@@ -21,6 +21,8 @@ final class EditContactViewModel: ObservableObject {
         self.provider = provider
         self.context = provider.newContext
         
+        //Check if existing already to edit/update
+        //Else make a new contact
         if let contact, let existingContactCopy = provider.exists(contact, in: context) {
             self.contact = existingContactCopy
             self.isNew = false
@@ -31,7 +33,7 @@ final class EditContactViewModel: ObservableObject {
         
     }
     
-    
+    //User provider to save data
     func save() throws {
         try provider.persist(in: context)
     }

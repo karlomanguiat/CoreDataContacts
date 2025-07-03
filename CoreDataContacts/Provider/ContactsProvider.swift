@@ -37,10 +37,12 @@ final class ContactsProvider {
         }
     }
     
+    //Check if contact exists
     func exists(_ contact: Contact, in context: NSManagedObjectContext) -> Contact? {
         try? context.existingObject(with: contact.objectID) as? Contact
     }
     
+    //Delete contact with Task
     func delete(_ contact: Contact, in context: NSManagedObjectContext) throws {
         if let existingContact = exists(contact, in: context) {
             context.delete(existingContact)
@@ -53,6 +55,7 @@ final class ContactsProvider {
         }
     }
     
+    //Save values whenever changes are received
     func persist(in context: NSManagedObjectContext) throws {
         if context.hasChanges {
             try context.save()
