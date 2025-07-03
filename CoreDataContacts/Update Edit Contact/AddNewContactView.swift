@@ -12,6 +12,8 @@ struct AddNewContactView: View {
     
     @ObservedObject var viewModel: EditContactViewModel
     
+    @State private var hasError: Bool = false
+    
     var body: some View {
         List {
             Section("General") {
@@ -43,13 +45,7 @@ struct AddNewContactView: View {
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
-                    do {
-                        try viewModel.save()
-                        dismiss()
-                    } catch {
-                        print(error)
-                    }
-                    
+                   validateContact()
                 }
             }
             
@@ -58,6 +54,25 @@ struct AddNewContactView: View {
                     dismiss()
                 }
             }
+        }
+        .alert(isPresented: $hasError) {
+            Alert(title: Text("Validation Error"),
+                  message: Text("Please fill out all required fields."))
+        }
+    }
+}
+
+private extension AddNewContactView {
+    func validateContact() {
+        if viewModel.contact.isValid {
+            do {
+                try viewModel.save()
+                dismiss()
+            } catch {
+                print(error)
+            }
+        } else {
+            hasError = true
         }
     }
 }

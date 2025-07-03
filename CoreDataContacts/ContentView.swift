@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var contactToEdit: Contact?
+    @State private var searchText: SearchConfiguration = .init()
     
     @FetchRequest(fetchRequest: Contact.all()) private var contacts
     
@@ -17,7 +18,6 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                
                 if contacts.isEmpty {
                     ContactEmptyView()
                 } else {
@@ -29,11 +29,11 @@ struct ContentView: View {
                                 }
                                 .opacity(0)
                                 
-                                ContactRowView(contact: contact)
+                                ContactRowView(contact: contact, provider: provider)
                                     .swipeActions(allowsFullSwipe: true) {
                                         Button(role: .destructive) {
                                             do {
-                                                try delete(contact)
+                                                try provider.delete(contact, in: provider.newContext)
                                             } catch {
                                                 print(error)
                                             }
@@ -58,7 +58,7 @@ struct ContentView: View {
                     }
                 }
             }
-            
+            .searchable(text: $searchText.query)
             .navigationTitle("Contacts")
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -79,24 +79,17 @@ struct ContentView: View {
                 }
                 
             })
+            .onChange(of: searchText) { oldValue, newValue in
+                contacts.nsPredicate = NSPredicate(format: "name CONTAINS[cd] %@", newValue.query)
+            }
+            
             
         }
     }
 }
 
-extension ContentView {
-    func delete(_ contact: Contact) throws {
-        let context = provider.viewContext
-        let existingContact = try context.existingObject(with: contact.objectID)
-        
-        context.delete(existingContact)
-        
-        Task (priority: .background) {
-            try await context.perform {
-                try context.save()
-            }
-        }
-    }
+struct SearchConfiguration: Equatable {
+    var query: String = ""
 }
 
 #Preview {

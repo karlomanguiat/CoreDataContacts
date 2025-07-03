@@ -17,6 +17,10 @@ final class Contact: NSManagedObject, Identifiable {
     @NSManaged var notes: String
     @NSManaged var isFavorite: Bool
     
+    var isValid: Bool {
+        !name.isEmpty && !email.isEmpty && !phoneNumber.isEmpty
+    }
+    
     var isBirthday: Bool {
         Calendar.current.isDateInToday(birthDate)
     }
@@ -44,6 +48,10 @@ extension Contact {
             NSSortDescriptor(keyPath: \Contact.name, ascending: true)
         ]
         return request
+    }
+    
+    static func filter(_ query: String) -> NSPredicate {
+        query.isEmpty ? NSPredicate(value: true) : NSPredicate(format: "name CONTAINS[cd] %@", query)
     }
 }
 

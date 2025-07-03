@@ -14,12 +14,14 @@ final class EditContactViewModel: ObservableObject {
     
     var isNew: Bool
     
+    private let provider: ContactsProvider
     private let context: NSManagedObjectContext
     
     init(contact: Contact? = nil, provider: ContactsProvider) {
+        self.provider = provider
         self.context = provider.newContext
         
-        if let contact, let existingContactCopy = try? context.existingObject(with: contact.objectID) as? Contact {
+        if let contact, let existingContactCopy = provider.exists(contact, in: context) {
             self.contact = existingContactCopy
             self.isNew = false
         } else {
@@ -31,8 +33,6 @@ final class EditContactViewModel: ObservableObject {
     
     
     func save() throws {
-        if context.hasChanges {
-            try context.save()
-        }
+        try provider.persist(in: context)
     }
 }
